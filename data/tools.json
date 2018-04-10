@@ -1,0 +1,23 @@
+[
+  {
+    "name":"Hario V60 Dripper (White)",
+    "title":"Hario V60 Dripper (White)",
+    "category":"brew_tool",
+    "price":10,
+    "description":"Widely recognized around the world, the V60 pour over.",
+    "image":"https://static1.squarespace.com/static/584c354eebbd1a316fc686eb/58ba0179db29d66bb39efd90/59318350a5790aea042017a0/1496417370796/Screen+Shot+2017-06-02+at+9.23.32+AM.png?format=500w",
+    "largeImage":"https://static1.squarespace.com/static/584c354eebbd1a316fc686eb/58ba0179db29d66bb39efd90/59318350a5790aea042017a0/1496417370796/Screen+Shot+2017-06-02+at+9.23.32+AM.png?format=500w"
+  },{
+    "name":"Hario V60 Dripper (Red)",
+    "title":"Hario V60 Dripper (Red)",
+    "category":"brew_tool",
+    "price":10,
+    "description":"Widely recognized around the world, the V60 pour over.",
+    "image":"https://static.prima-coffee.com/hario-v60-02-dripper-plastic-red.jpg",
+    "largeImage":"https://static.prima-coffee.com/hario-v60-02-dripper-plastic-red.jpg"
+  }
+
+
+
+  
+]

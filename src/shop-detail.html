@@ -155,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h1>[[item.title]]</h1>
         <div class="price">[[_formatPrice(item.price)]]</div>
         <div class="pickers">
-          <shop-select>
+<!--           <shop-select>
             <label id="sizeLabel" prefix>Size</label>
             <select id="sizeSelect" aria-labelledby="sizeLabel">
               <option value="XS">XS</option>
@@ -167,7 +167,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <shop-md-decorator aria-hidden="true">
               <shop-underline></shop-underline>
             </shop-md-decorator>
-          </shop-select>
+          </shop-select> -->
           <shop-select>
             <label id="quantityLabel" prefix>Quantity</label>
             <select id="quantitySelect" aria-labelledby="quantityLabel">
@@ -275,7 +275,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           bubbles: true, composed: true, detail: {
             item: this.item,
             quantity: parseInt(this.$.quantitySelect.value, 10),
-            size: this.$.sizeSelect.value
+            // size: this.$.sizeSelect.value
           }}));
       }
 

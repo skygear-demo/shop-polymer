@@ -263,7 +263,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <paper-icon-button icon="arrow-back" aria-label="Go back"></paper-icon-button>
           </a>
         </div>
-        <div class="logo" main-title><a href="/" aria-label="SHOP Home">SHOP</a></div>
+        <div class="logo" main-title><a href="/" aria-label="SHOP Home">SKYGEAR STORE</a></div>
         <div class="cart-btn-container">
           <a href="/cart" tabindex="-1">
             <paper-icon-button icon="shopping-cart" aria-label$="Shopping cart: [[_computePluralizedQuantity(numItems)]]"></paper-icon-button>
@@ -279,6 +279,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <shop-tabs
                 selected="[[categoryName]]"
                 attr-for-selected="name">
+                <shop-tab name="about">
+                  <a href="/about">About</a>
+                </shop-tab>
               <dom-repeat items="[[categories]]" as="category" initial-count="4">
                 <template>
                 <shop-tab name="[[category.name]]">
@@ -298,6 +301,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- Two-way bind `drawerOpened` since app-drawer can update `opened` itself. -->
       <app-drawer opened="{{drawerOpened}}" swipe-open tabindex="0">
         <iron-selector role="navigation" class="drawer-list" selected="[[categoryName]]" attr-for-selected="name">
+          
+            <a name="about" href="/about">About</a>
+          
           <dom-repeat items="[[categories]]" as="category" initial-count="4">
             <template>
               <a name="[[category.name]]" href="/list/[[category.name]]">[[category.title]]</a>
@@ -312,6 +318,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <!-- home view -->
       <shop-home name="home" categories="[[categories]]"></shop-home>
       <!-- list view of items in a category -->
+
+      <shop-about name="about"></shop-about>
+
       <shop-list name="list" route="[[subroute]]" offline="[[offline]]"></shop-list>
       <!-- detail view of one item -->
       <shop-detail name="detail" route="[[subroute]]" offline="[[offline]]"></shop-detail>
@@ -323,10 +332,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <shop-404-warning name="404"></shop-404-warning>
     </iron-pages>
 
-    <footer>
-      <a href="https://www.polymer-project.org/1.0/toolbox/">Made by Polymer</a>
-      <div class="demo-label">Demo Only</div>
-    </footer>
+     <footer>
+      Powered by <a href="https://skygear.io">Skygear</a>. Layout by Google Polymer.
+    </footer> 
 
     <!-- a11y announcer -->
     <div class="announcer" aria-live="assertive">[[_a11yLabel]]</div>
