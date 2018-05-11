@@ -1,0 +1,15 @@
+{
+  "name": "skygear-stripe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "stripe": "^5.8.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "David Ng <david.ng@oursky.com> (http://www.oursky.com/)",
+  "license": "ISC"
+}
