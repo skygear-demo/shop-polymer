@@ -198,7 +198,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <button on-click="_addToCart" aria-label="Add this item to cart">Add to Cart</button>
         </shop-button>
 
-        <shop-button responsive active$="[[_isSubscription(item)]]">
+        <shop-button responsive hidden$="[[!_isSubscription(item)]]">
           <button on-click="_showStripe" aria-label="Subscribe to plan">Subscribe</button>
         </shop-button>
 
