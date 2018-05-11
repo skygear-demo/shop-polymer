@@ -11,6 +11,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="shop-button.html">
 <link rel="import" href="shop-category-data.html">
 <link rel="import" href="shop-common-styles.html">
@@ -46,6 +48,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         content: "";
         display: block;
         padding-top: 100%;
+      }
+
+      paper-spinner-lite {
+        position: fixed;
+        top: calc(50% - 14px);
+        left: calc(50% - 14px);
       }
 
       .detail {
@@ -155,7 +163,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <h1>[[item.title]]</h1>
         <div class="price">[[_formatPrice(item.price)]]</div>
         <div class="pickers">
-<!--           <shop-select>
+          <shop-select hidden$="[[nosize]]">
             <label id="sizeLabel" prefix>Size</label>
             <select id="sizeSelect" aria-labelledby="sizeLabel">
               <option value="XS">XS</option>
@@ -167,7 +175,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <shop-md-decorator aria-hidden="true">
               <shop-underline></shop-underline>
             </shop-md-decorator>
-          </shop-select> -->
+          </shop-select>
           <shop-select>
             <label id="quantityLabel" prefix>Quantity</label>
             <select id="quantitySelect" aria-labelledby="quantityLabel">
@@ -186,11 +194,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h2>Description</h2>
           <p id="desc"></p>
         </div>
-        <shop-button responsive>
+        <shop-button responsive hidden$="[[_isSubscription(item)]]">
           <button on-click="_addToCart" aria-label="Add this item to cart">Add to Cart</button>
         </shop-button>
+
+        <shop-button responsive active$="[[_isSubscription(item)]]">
+          <button on-click="_showStripe" aria-label="Subscribe to plan">Subscribe</button>
+        </shop-button>
+
       </div>
+
+      <paper-dialog id="modal" modal>
+        <p>[[response.successMessage]]</p>
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus>Done</paper-button>
+        </div>
+      </paper-dialog>
     </div>
+
 
     <!--
       shop-network-warning shows a warning message when the items can't be rendered due
@@ -201,7 +222,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         offline="[[offline]]"
         on-try-reconnect="_tryReconnect"></shop-network-warning>
 
+
+    <!-- Show spinner when waiting for the server to repond -->
+    <paper-spinner-lite active="[[waiting]]"></paper-spinner-lite>
+
   </template>
+
+  <script src="https://checkout.stripe.com/checkout.js"></script>
 
   <script>
 
@@ -222,6 +249,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           value: false
         },
 
+        nosize: {
+          type: Boolean,
+          value: false
+        },
+
         offline: {
           type: Boolean,
           observer: '_offlineChanged'
@@ -235,6 +267,81 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_itemChanged(item, visible)'
       ]}
 
+      /**
+       * Handles the response from the server by checking the response status
+       * and transitioning to the success or error UI.
+       */
+      _didReceiveResponse(data) {
+        let response = data.detail.response;
+        this.response = response;
+        this._setWaiting(false);
+
+        modal.open();
+      }
+
+      _createPayment(token, item) {
+        let my_this = this;
+        var token = token;
+        const params = {
+          'price': item.price,
+          'token': token,
+          'description': item.description
+        };
+
+        skygear.lambda('subscribe', params)
+          .then(response => {
+            console.log(response);
+            if (response.status == 'succeeded') {
+              my_this.dispatchEvent(new CustomEvent('subscribe-response', {
+                composed: true, detail: {
+                  response: {
+                    success: 1,
+                    successMessage: 'Demo checkout process complete.'
+                  }
+                }}));
+            } else {
+
+              my_this.dispatchEvent(new CustomEvent('subscribe-response', {
+                composed: true, detail: {
+                  response: {
+                    success: 0,
+                    successMessage: 'Sorry, there is a problem checking out. Please contact us.'
+                  }
+                }}));
+            }
+          });
+      }
+
+      _showStripe() {
+        let item = this.item
+        let my_this = this;
+        var handler = StripeCheckout.configure({
+          key: 'pk_test_Tf9JkRfp0rqeaHOrpkNXLDCm',
+          image: 'https://skygear.io/styleguide/img/thegear-colored.png',
+          locale: 'auto',
+          token: function(token) {
+            // You can access the token ID with `token.id`.
+            // Get the token ID to your server-side code for use.
+            my_this._createPayment(token, item);
+          }
+        });
+
+        handler.open({
+          name: item.name,
+          description: item.description,
+          currency: 'usd',
+          amount: parseInt(`${Math.round(item.price * 100)}`)
+        });
+      }
+
+      ready() {
+        super.ready();
+        this.addEventListener('subscribe-response', (e) => {
+          console.log('subscribe-response listened');
+          _didReceiveResponse(e);
+        })
+      }
+
       _itemChanged(item, visible) {
         if (visible) {
           this._itemChangeDebouncer = Polymer.Debouncer.debounce(this._itemChangeDebouncer,
@@ -247,6 +354,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               // Reset the select menus.
               this.$.quantitySelect.value = '1';
               this.$.sizeSelect.value = 'M';
+
+              this.nosize = item ? !item.hasOwnProperty('sizeChoices') : false;
+              // TODO: add custom size choices
+
+              console.log(`nosize = ${this.nosize}`)
 
               this.dispatchEvent(new CustomEvent('change-section', {
                 bubbles: true, composed: true, detail: {
@@ -275,8 +387,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           bubbles: true, composed: true, detail: {
             item: this.item,
             quantity: parseInt(this.$.quantitySelect.value, 10),
-            // size: this.$.sizeSelect.value
+            size: this.$.sizeSelect.value
           }}));
+      }
+
+      _isSubscription(item) {
+        return item!=null ? item.hasOwnProperty('subscription') && item.subscription : false;
       }
 
       _isDefined(item) {

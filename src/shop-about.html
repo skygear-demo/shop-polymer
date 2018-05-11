@@ -62,6 +62,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     class ShopAbout extends Polymer.Element {
       static get is() { return 'shop-about'; }
+
+      static get properties() { return {
+
+        categories: {
+          type: Array
+        },
+
+        visible: {
+          type: Boolean,
+          observer: '_visibleChanged'
+        }
+
+      }}
+
+      _visibleChanged(visible) {
+        if (visible) {
+          this.dispatchEvent(new CustomEvent('change-section', {
+            bubbles: true, composed: true, detail: {title: 'Skygear'}}));
+        }
+      }
     }
 
     customElements.define(ShopAbout.is, ShopAbout);

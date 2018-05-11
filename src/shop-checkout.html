@@ -8,6 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
+<script src="https://js.stripe.com/v2/"></script>
+<script src="https://js.stripe.com/v3/"></script>
+
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
@@ -287,81 +290,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <section>
                   <h2>Payment Method</h2>
-                  <div class="row input-row">
-                    <shop-input>
-                      <input type="text" id="ccName" name="ccName" pattern=".{3,}"
-                          placeholder="Cardholder Name" required
-                          autocomplete="cc-name">
-                      <shop-md-decorator error-message="Invalid Cardholder Name" aria-hidden="true">
-                        <label for="ccName">Cardholder Name</label>
-                        <shop-underline></shop-underline>
-                      </shop-md-decorator>
-                    </shop-input>
-                  </div>
-                  <div class="row input-row">
-                    <shop-input>
-                      <input type="tel" id="ccNumber" name="ccNumber" pattern="[\d\s]{15,}"
-                          placeholder="Card Number" required
-                          autocomplete="cc-number">
-                      <shop-md-decorator error-message="Invalid Card Number" aria-hidden="true">
-                        <label for="ccNumber">Card Number</label>
-                        <shop-underline></shop-underline>
-                      </shop-md-decorator>
-                    </shop-input>
-                  </div>
-                  <div class="row input-row">
-                    <div class="column">
-                      <label for="ccExpMonth">Expiry</label>
-                      <shop-select>
-                        <select id="ccExpMonth" name="ccExpMonth" required
-                             autocomplete="cc-exp-month" aria-label="Expiry month">
-                          <option value="01" selected>Jan</option>
-                          <option value="02">Feb</option>
-                          <option value="03">Mar</option>
-                          <option value="04">Apr</option>
-                          <option value="05">May</option>
-                          <option value="06">Jun</option>
-                          <option value="07">Jul</option>
-                          <option value="08">Aug</option>
-                          <option value="09">Sep</option>
-                          <option value="10">Oct</option>
-                          <option value="11">Nov</option>
-                          <option value="12">Dec</option>
-                        </select>
-                        <shop-md-decorator aria-hidden="true">
-                          <shop-underline></shop-underline>
-                        </shop-md-decorator>
-                      </shop-select>
+                  
+                    <div class="form-row">
+                      <label for="card-element">
+                        Credit or debit card
+                      </label>
+                      <div id="card-element">
+                        <!-- A Stripe Element will be inserted here. -->
+                      </div>
+
+                      <!-- Used to display Element errors. -->
+                      <div id="card-errors" role="alert"></div>
                     </div>
-                    <shop-select>
-                      <select id="ccExpYear" name="ccExpYear" required
-                          autocomplete="cc-exp-year" aria-label="Expiry year">
-                        <option value="2016" selected>2016</option>
-                        <option value="2017">2017</option>
-                        <option value="2018">2018</option>
-                        <option value="2019">2019</option>
-                        <option value="2020">2020</option>
-                        <option value="2021">2021</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
-                        <option value="2024">2024</option>
-                        <option value="2025">2025</option>
-                        <option value="2026">2026</option>
-                      </select>
-                      <shop-md-decorator aria-hidden="true">
-                        <shop-underline></shop-underline>
-                      </shop-md-decorator>
-                    </shop-select>
-                    <shop-input>
-                      <input type="tel" id="ccCVV" name="ccCVV" pattern="\d{3,4}"
-                          placeholder="CVV" required
-                          autocomplete="cc-csc">
-                      <shop-md-decorator error-message="Invalid CVV" aria-hidden="true">
-                        <label for="ccCVV">CVV</label>
-                        <shop-underline></shop-underline>
-                      </shop-md-decorator>
-                    </shop-input>
-                  </div>
                   <h2>Order Summary</h2>
                   <dom-repeat items="[[cart]]" as="entry">
                     <template>
@@ -386,7 +326,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <!-- Success message UI -->
         <header state="success">
-          <h1>Thank you</h1>
+          <h1>Thank you!</h1>
           <p>[[response.successMessage]]</p>
           <shop-button responsive>
             <a href="/">Finish</a>
@@ -398,7 +338,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <h1>We couldn&acute;t process your order</h1>
           <p id="errorMessage">[[response.errorMessage]]</p>
           <shop-button responsive>
-            <a href="/checkout">Try again</a>
+            <a href="/checkout">Try again.</a>
           </shop-button>
         </header>
 
@@ -420,7 +360,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
-
     class ShopCheckout extends Polymer.Element {
 
       static get is() { return 'shop-checkout'; }
@@ -499,27 +438,102 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         '_updateState(routeActive, routeData)'
       ]}
 
-      _submit(e) {
-        if (this._validateForm()) {
-          // To send the form data to the server:
-          // 2) Remove the code below.
-          // 3) Uncomment `this.$.checkoutForm.submit()`.
+      ready() {
+        console.log("ready");
+        super.ready();
+      }
 
-          this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-presubmit', {
-            composed: true}));
-
-          this._submitFormDebouncer = Polymer.Debouncer.debounce(this._submitFormDebouncer,
-            Polymer.Async.timeOut.after(1000), () => {
-              this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-response', {
+      _skygearPay (response) {
+        console.log("skygear Pay");
+        let my_this = this;
+        var token = response.id;
+        const params = {
+          'price': 1200,
+          'token': token,
+          'description': 'test'
+        };
+        skygear.lambda('payment', params)
+          .then(response => {
+            console.log(response);
+            if (response.status == 'succeeded') {
+              my_this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-response', {
                 composed: true, detail: {
                   response: {
                     success: 1,
                     successMessage: 'Demo checkout process complete.'
                   }
                 }}));
-            });
+            } else {
 
-          // this.$.checkoutForm.submit();
+              my_this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-response', {
+                composed: true, detail: {
+                  response: {
+                    success: 0,
+                    successMessage: 'Sorry, there is a problem checking out. Please contact us.'
+                  }
+                }}));
+            }
+          });
+      }
+
+      _submit(e) {
+        if (this._validateForm()) {
+          // To send the form data to the server:
+          // 2) Remove the code below.
+          // 3) Uncomment `this.$.checkoutForm.submit()`.
+
+          // this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-presubmit', {
+          //   composed: true}));
+
+          // this._submitFormDebouncer = Polymer.Debouncer.debounce(this._submitFormDebouncer,
+          //   Polymer.Async.timeOut.after(1000), () => {
+          //     this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-response', {
+          //       composed: true, detail: {
+          //         response: {
+          //           success: 1,
+          //           successMessage: 'Demo checkout process complete.'
+          //         }
+          //       }}));
+          //   });
+
+          let form = this.$.checkoutForm;
+          let nativeForm = form._form;
+
+          console.log(nativeForm);
+
+          let cardInfo = {
+            number: '4242424242424242',
+            cvc: '309',
+            exp_month: '12',
+            exp_year: '2020'
+          }
+
+          // Stripe
+          console.log("OK")
+          let my_this = this;
+          my_this.$.checkoutForm.dispatchEvent(new CustomEvent('iron-form-presubmit', {
+            composed: true}));
+
+
+          var stripeResponseHandler = function(status, response) {
+
+            console.log(response, status);
+
+            if (response.error) { // Problem!
+
+
+            } else { // Token created!
+
+              // Get the token ID:
+
+              my_this._skygearPay(response);
+
+            }
+          }
+
+          var stripe = Stripe('pk_test_Tf9JkRfp0rqeaHOrpkNXLDCm');
+          Stripe.card.createToken(cardInfo, stripeResponseHandler);
+
         }
       }
 
@@ -555,7 +569,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         let form = this.$.checkoutForm;
 
         this._setWaiting(false);
-        form.reset();
+        // form.reset();
 
         let nativeForm = form._form;
         if (!nativeForm) {
@@ -573,6 +587,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * that don't match the pattern specified in the markup.
        */
       _validateForm() {
+
+        return true;
+
         let form = this.$.checkoutForm;
         let firstInvalid = false;
         let nativeForm = form._form;

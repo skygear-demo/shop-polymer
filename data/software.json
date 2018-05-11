@@ -2,9 +2,44 @@
   {
     "name":"Skygear Mini Plan",
     "title":"Skygear Mini Plan",
-    "category":"skygear_plan",
-    "price":49,
+    "category":"software",
+    "price": 49,
+    "subscription": true,
+    "planID": "prod_Cpo3eRlWsjxen8",
     "description":"$49/month - Monthly subscription to Skygear Hosting",
+    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
+    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+  },
+  {
+    "name":"Skygear Hobbyist Plan",
+    "title":"Skygear Hobbyist Plan",
+    "category":"software",
+    "price": 99,
+    "subscription": true,
+    "planID": "prod_Cpo3eRlWsjxen8",
+    "description":"$99/month - Monthly subscription to Skygear Hosting",
+    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
+    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+  },
+  {
+    "name":"Skygear Production Plan",
+    "title":"Skygear Production Plan",
+    "category":"software",
+    "price": 499,
+    "subscription": true,
+    "planID": "prod_Cpo3eRlWsjxen8",
+    "description":"$499/month - Monthly subscription to Skygear Hosting",
+    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
+    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+  },
+  {
+    "name":"Skygear Dedicated Plan",
+    "title":"Skygear Dedicated Plan",
+    "category":"software",
+    "price": 999,
+    "subscription": true,
+    "planID": "prod_Cpo3eRlWsjxen8",
+    "description":"Fexible pricing. Please contact us at hello@skygear.io, we will arrange a tailored plan for you.",
     "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
     "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
   }
