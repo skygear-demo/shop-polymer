@@ -6,6 +6,7 @@
     "src/shop-detail.html",
     "src/shop-cart.html",
     "src/shop-checkout.html",
+    "src/shop-about.html",
     "src/lazy-resources.html"
   ],
   "sources": [

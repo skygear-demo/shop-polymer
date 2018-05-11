@@ -19,7 +19,9 @@
     "iron-pages": "polymerelements/iron-pages#^2.0.0",
     "iron-selector": "polymerelements/iron-selector#^2.0.0",
     "paper-icon-button": "polymerelements/paper-icon-button#^2.0.0",
-    "paper-spinner": "polymerelements/paper-spinner#^2.0.0"
+    "paper-spinner": "polymerelements/paper-spinner#^2.0.0",
+    "paper-dialog": "polymerelements/paper-dialog#^2.1.0",
+    "paper-button": "polymerelements/paper-button#^2.0.0"
   },
   "devDependencies": {
     "web-component-tester": "^6.0.0"
