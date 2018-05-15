@@ -4,7 +4,7 @@
     "title":"Sponsor Skygear Open Source Project",
     "category":"misc",
     "price":1.99,
-    "description":"Skygear is an open-source mobile backend for app developers. Learn about us at https://github.com/skygearIO/skygear-server. Support the software developemnt by donation.",
+    "description":"Skygear is an open-source mobile backend for app developers. Learn about us at <a href=\"https://github.com/skygearIO/skygear-server\">GitHub</a>. <br><br>Support the software developemnt by donation.",
     "image":"https://s3.amazonaws.com/poly-screenshots.angel.co/enhanced_screenshots/466273-original.png",
     "largeImage":"https://s3.amazonaws.com/poly-screenshots.angel.co/enhanced_screenshots/466273-original.png"
   }

@@ -28,6 +28,8 @@ skygearCloud.op('payment', function (param, options) {
         reject('err');
       }
       // asynchronously called
+      // Skygear save a charge
+
       resolve(charge);
     });
   });
@@ -42,7 +44,35 @@ skygearCloud.op('subscribe', function (param, options) {
   } = options;
   console.log(param['args']);
 
-  return {status: "succeeded"};
+  let args = param['args'];
+  let plan = args.plan
+  let token = args.token
+
+  return new Promise((resolve, reject) => {
+
+    stripe.customers.create({
+      email: token.email,
+      source: token.id,
+    }, function(err, customer) {
+  // asynchronously called
+      console.log("created customer!");
+      if (err) {
+        console.log(err);
+        reject({status: "failed"});
+      }
+      console.log(customer);
+      stripe.subscriptions.create({
+        customer: customer.id,
+        items: [{plan: plan}],
+        billing: 'send_invoice',
+        days_until_due: 10,
+        }, function(err, subscription) {
+          console.log(err);
+          console.log(subscription);
+          resolve({status: "succeeded"});
+        });
+    });
+  });
 
   // return new Promise(function(resolve, reject){
   //   stripe.charges.create({

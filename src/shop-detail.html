@@ -56,6 +56,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         left: calc(50% - 14px);
       }
 
+      paper-dialog.colored {
+        border: 1px solid;
+        border-radius: 4px;
+        border-color: #ccc;
+        background-color: #fff;
+        color: #333;
+      }
+
       .detail {
         margin: 64px 32px;
         width: 50%;
@@ -147,6 +155,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         pattern="/:category/:item"
         data="{{routeData}}"></app-route>
 
+    <!-- Show spinner when waiting for the server to repond -->
+    <paper-spinner-lite active="[[waiting]]"></paper-spinner-lite>
+
     <!--
       shop-category-data provides the item data for a given category and item name.
     -->
@@ -203,15 +214,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </shop-button>
 
       </div>
-
-      <paper-dialog id="modal" modal>
-        <p>[[response.successMessage]]</p>
-        <div class="buttons">
-          <paper-button dialog-confirm autofocus>Done</paper-button>
-        </div>
-      </paper-dialog>
     </div>
-
 
     <!--
       shop-network-warning shows a warning message when the items can't be rendered due
@@ -226,11 +229,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <!-- Show spinner when waiting for the server to repond -->
     <paper-spinner-lite active="[[waiting]]"></paper-spinner-lite>
 
+    <paper-dialog id="modal" modal opened="[[modalOpen]]" class="colored">
+      <h2>Thanks!</h2>
+      <p>[[response.successMessage]]</p>
+      <div class="buttons">
+        <paper-button dialog-confirm autofocus>Done</paper-button>
+      </div>
+    </paper-dialog>
+
   </template>
+
+
 
   <script src="https://checkout.stripe.com/checkout.js"></script>
 
   <script>
+
+    const modal = document.querySelector('#modal');
 
     class ShopDetail extends Polymer.Element {
 
@@ -259,6 +274,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           observer: '_offlineChanged'
         },
 
+        waiting: {
+          type: Boolean,
+          readOnly: true,
+          reflectToAttribute: true
+        },
+
+        modalOpen: {
+          type: Boolean,
+          value: false,
+          readOnly: true,
+          reflectToAttribute: true
+        },
+
         failure: Boolean
 
       }}
@@ -276,7 +304,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         this.response = response;
         this._setWaiting(false);
 
-        modal.open();
+        this._setModalOpen(true);
       }
 
       _createPayment(token, item) {
@@ -284,9 +312,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var token = token;
         const params = {
           'price': item.price,
+          'plan': item.plan,
           'token': token,
           'description': item.description
         };
+
+        this._setWaiting(true);
 
         skygear.lambda('subscribe', params)
           .then(response => {
@@ -322,6 +353,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           token: function(token) {
             // You can access the token ID with `token.id`.
             // Get the token ID to your server-side code for use.
+            console.log(token)
             my_this._createPayment(token, item);
           }
         });
@@ -338,7 +370,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         super.ready();
         this.addEventListener('subscribe-response', (e) => {
           console.log('subscribe-response listened');
-          _didReceiveResponse(e);
+          this._didReceiveResponse(e);
         })
       }
 

@@ -5,10 +5,10 @@
     "category":"software",
     "price": 49,
     "subscription": true,
-    "planID": "prod_Cpo3eRlWsjxen8",
+    "plan": "skygear-test-plan",
     "description":"$49/month - Monthly subscription to Skygear Hosting",
-    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
-    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+    "image":"images/skygear-mini.png",
+    "largeImage":"images/skygear-mini.png"
   },
   {
     "name":"Skygear Hobbyist Plan",
@@ -16,10 +16,10 @@
     "category":"software",
     "price": 99,
     "subscription": true,
-    "planID": "prod_Cpo3eRlWsjxen8",
+    "plan": "skygear-test-plan",
     "description":"$99/month - Monthly subscription to Skygear Hosting",
-    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
-    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+    "image":"images/skygear-hobbyist.png",
+    "largeImage":"images/skygear-hobbyist.png"
   },
   {
     "name":"Skygear Production Plan",
@@ -27,10 +27,10 @@
     "category":"software",
     "price": 499,
     "subscription": true,
-    "planID": "prod_Cpo3eRlWsjxen8",
+    "plan": "skygear-test-plan",
     "description":"$499/month - Monthly subscription to Skygear Hosting",
-    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
-    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+    "image":"images/skygear-production.png",
+    "largeImage":"images/skygear-production.png"
   },
   {
     "name":"Skygear Dedicated Plan",
@@ -38,9 +38,9 @@
     "category":"software",
     "price": 999,
     "subscription": true,
-    "planID": "prod_Cpo3eRlWsjxen8",
+    "plan": "skygear-test-plan",
     "description":"Fexible pricing. Please contact us at hello@skygear.io, we will arrange a tailored plan for you.",
-    "image":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb_1x.png",
-    "largeImage":"https://cdn.dribbble.com/users/253251/screenshots/3884687/dribbble_skygearweb.png"
+    "image":"images/skygear-dedicated.png",
+    "largeImage":"images/skygear-dedicated.png"
   }
 ]
