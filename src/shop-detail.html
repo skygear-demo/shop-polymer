@@ -187,7 +187,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               <shop-underline></shop-underline>
             </shop-md-decorator>
           </shop-select>
-          <shop-select>
+          <shop-select hidden$="[[_hideQuantity(item)]]">
             <label id="quantityLabel" prefix>Quantity</label>
             <select id="quantitySelect" aria-labelledby="quantityLabel">
               <option value="1" selected>1</option>
@@ -425,6 +425,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       _isSubscription(item) {
         return item!=null ? item.hasOwnProperty('subscription') && item.subscription : false;
+      }
+
+      _hideQuantity(item) {
+        return this._isSubscription(item);
       }
 
       _isDefined(item) {

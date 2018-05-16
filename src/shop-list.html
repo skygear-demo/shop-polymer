@@ -89,7 +89,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     -->
     <shop-category-data
         id="categoryData"
-        category-name="[[routeData.category]]"
+        categories="[[categories]]"
+        category-name="{{routeData.category}}"
         category="{{category}}"
         failure="{{failure}}"></shop-category-data>
 
@@ -189,20 +190,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         if (!visible) {
           return;
         }
+
         this._changeSectionDebouncer = Polymer.Debouncer.debounce(this._changeSectionDebouncer,
           Polymer.Async.microTask, () => {
-            if (category) {
-              // Notify the category and the page's title
-              this.dispatchEvent(new CustomEvent('change-section', {
-                bubbles: true, composed: true, detail: {
-                  category: category.name,
-                  title: category.title,
-                  image: this.baseURI + category.image
-                }}));
-            } else {
-              this.dispatchEvent(new CustomEvent('show-invalid-url-warning', {
-                bubbles: true, composed: true}));
-            }
+            // Notify the category and the page's title
+            this.dispatchEvent(new CustomEvent('change-section', {
+              bubbles: true, composed: true, detail: {
+                category: category.name,
+                title: category.title,
+                image: this.baseURI + category.image
+              }}));
           });
       }
 

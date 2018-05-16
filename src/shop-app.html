@@ -283,7 +283,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <shop-tab name="about">
                   <a href="/about">About</a>
                 </shop-tab>
-              <dom-repeat items="[[categories]]" as="category" initial-count="4">
+              <dom-repeat items="[[categories]]" as="category" initial-count="[[categories.length]]">
                 <template>
                 <shop-tab name="[[category.name]]">
                   <a href="/list/[[category.name]]">[[category.title]]</a>
@@ -305,7 +305,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           
             <a name="about" href="/about">About</a>
           
-          <dom-repeat items="[[categories]]" as="category" initial-count="4">
+          <dom-repeat items="[[categories]]" as="category" initial-count="[[categories.length]]">
             <template>
               <a name="[[category.name]]" href="/list/[[category.name]]">[[category.title]]</a>
             </template>

@@ -10,6 +10,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
+<script src="https://code.skygear.io/js/polyfill/latest/polyfill.min.js"></script>
+<script src="https://code.skygear.io/js/skygear/latest/skygear.min.js"></script>
+
 <dom-module id="shop-category-data">
 
   <script>
@@ -41,26 +44,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     ];
 
+    class SkygearContainer extends Polymer.Element {
+
+      constructor(){
+          this.skygearContainer = skygear
+      }
+
+      static getSkygear () {
+         SkygearContainer.skygearContainer = skygear;
+        return new Promise(function (resolve, reject) {
+          SkygearContainer.skygearContainer.config({
+            'endPoint': 'https://onlineshop.skygeario.com/',
+            'apiKey': '61ec03231d8b4f03b94bdb66175cc5bf',
+          }).then(() => {
+            console.log('skygear container is now ready for making API calls.');
+            resolve(SkygearContainer.skygearContainer);
+          }, (error) => {
+            console.error(error);
+            reject(error);
+          });
+        })
+      }
+    }
+
     class ShopCategoryData extends Polymer.Element {
 
       static get is() { return 'shop-category-data'; }
 
       static get properties() { return {
-
         categoryName: String,
 
         itemName: String,
 
         categories: {
           type: Array,
-          value: categoryList,
-          readOnly: true,
+          value: [],
+          readOnly: false,
           notify: true
         },
 
         category: {
           type: Object,
-          computed: '_computeCategory(categoryName)',
+          computed: '_computeCategory(categories, categoryName)',
           notify: true
         },
 
@@ -78,15 +103,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       }}
 
-      _getCategoryObject(categoryName) {
-        for (let i = 0, c; c = this.categories[i]; ++i) {
+      _getCategoryObject(categories, categoryName) {
+        for (let i = 0, c; c = categories[i]; ++i) {
           if (c.name === categoryName) {
+            console.log(c.name)
+            console.log(categoryName)
             return c;
           }
         }
+        // Only return 404 when the list is initialized
+        if(categoryName != undefined && categories.length > 0) {
+          this.dispatchEvent(new CustomEvent('show-invalid-url-warning', {
+            bubbles: true, composed: true}));
+        }
       }
 
-      _computeCategory(categoryName) {
+      _computeCategory(categories, categoryName) {
         // Fetch the items of the category. Note that the fetch is asynchronous,
         // which means `category.items` may not be set initially (but that path
         // will be notified when the fetch completes).
@@ -106,18 +138,63 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
       }
 
+      _fetchActiveCategoriesFromSkygear() {
+        return new Promise((resolve, reject)=> {
+          const Category = skygear.Record.extend('category');
+          const query = new skygear.Query(Category);
+          query.addAscending('order');
+
+          let m_this = this;
+          SkygearContainer.getSkygear().then((skygearContainer) => {
+            skygearContainer.publicDB.query(query).then((records ) => {
+              console.log(m_this.categories);
+              console.log(Array.from(records));
+              resolve(Array.from(records));
+              // m_this.categories = Array.from(records);
+
+              // m_this.categories = categoryList;
+
+              // this.dispatchEvent(new CustomEvent('categories-update', {
+              //   composed: true, detail: {
+              //     categories: Array.from(records)
+              //   }}));
+
+            }, (error) => {
+              console.error(error);
+              reject(error);
+            });
+          });
+        })
+       
+      }
+
+      _fetchItemsFromSkygear(category) {
+
+      }
+
       _fetchItems(category, attempts) {
+        console.log("_fetchItems" + category);
+        console.log(category);
+
         this._setFailure(false);
         // Only fetch the items of a category if it has not been previously set.
+        console.log("category:"+ category);
+        console.log(category);
         if (!category || category.items) {
+          console.log("returned");
           return;
         }
+
+        let m_this = this;
         this._getResource({
           url: 'data/' + category.name + '.json',
           onLoad(e) {
-            this.set('category.items', JSON.parse(e.target.responseText));
+            console.log('ok!');
+            console.log(e);
+            m_this.set('category.items', JSON.parse(e.target.responseText));
           },
           onError(e) {
+            console.log(e);
             this._setFailure(true);
           }
         }, attempts);
@@ -140,10 +217,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         xhr.send();
       }
 
+      ready() {
+        super.ready();
+        // this.categories = categoryList;
+        this._fetchActiveCategoriesFromSkygear().then((categories)=>{
+          this.categories = categories;
+        }).catch((err)=>{
+          console.log(err);
+        });
+      }
+
       refresh() {
         if (this.categoryName) {
           // Try at most 3 times to get the items.
-          this._fetchItems(this._getCategoryObject(this.categoryName), 3);
+          this._fetchItems(this._getCategoryObject(this.categories, this.categoryName), 3);
         }
       }
 
