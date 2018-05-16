@@ -9,7 +9,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <script src="https://js.stripe.com/v2/"></script>
-<script src="https://js.stripe.com/v3/"></script>
 
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
@@ -1009,9 +1008,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
           }
 
-          var stripe = Stripe('pk_test_Tf9JkRfp0rqeaHOrpkNXLDCm');
+          Stripe.setPublishableKey('pk_test_Tf9JkRfp0rqeaHOrpkNXLDCm')
           Stripe.card.createToken(cardInfo, stripeResponseHandler);
-
         }
       }
 

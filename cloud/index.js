@@ -10,6 +10,14 @@ skygearCloud.afterSave('charge', function(record, original, pool, options) {
     async: false
 });
 
+
+skygearCloud.afterSave('subscription', function(record, original, pool, options) {
+  console.log(record);
+  // Send notification email
+}, {
+    async: false
+});
+
 skygearCloud.op('payment', function (param, options) {
   const {
     context
@@ -49,7 +57,6 @@ skygearCloud.op('subscribe', function (param, options) {
   let token = args.token
 
   return new Promise((resolve, reject) => {
-
     stripe.customers.create({
       email: token.email,
       source: token.id,
@@ -73,22 +80,6 @@ skygearCloud.op('subscribe', function (param, options) {
         });
     });
   });
-
-  // return new Promise(function(resolve, reject){
-  //   stripe.charges.create({
-  //     amount: param['args'].price,
-  //     currency: "usd",
-  //     source: param['args'].token, 
-  //     description: param['args'].description
-  //   }, function(err, charge) {
-  //     if (err) {
-  //       console.log("Error" + JSON.stringify(err))
-  //       reject('err');
-  //     }
-  //     // asynchronously called
-  //     resolve(charge);
-  //   });
-  // });
 }, {
   userRequired: false
 });
