@@ -122,7 +122,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         // Fetch the items of the category. Note that the fetch is asynchronous,
         // which means `category.items` may not be set initially (but that path
         // will be notified when the fetch completes).
-        let categoryObj = this._getCategoryObject(categoryName);
+        let categoryObj = this._getCategoryObject(categories, categoryName);
         this._fetchItems(categoryObj, 1);
         return categoryObj;
       }
@@ -150,15 +150,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
               console.log(m_this.categories);
               console.log(Array.from(records));
               resolve(Array.from(records));
-              // m_this.categories = Array.from(records);
-
-              // m_this.categories = categoryList;
-
-              // this.dispatchEvent(new CustomEvent('categories-update', {
-              //   composed: true, detail: {
-              //     categories: Array.from(records)
-              //   }}));
-
             }, (error) => {
               console.error(error);
               reject(error);
