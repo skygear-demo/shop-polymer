@@ -149,7 +149,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                   </div>
                   <div class="row input-row">
                     <shop-input>
-                      <input type="tel" id="accountPhone" name="accountPhone" pattern="\d{10,}"
+                      <input type="tel" id="accountPhone" name="accountPhone" pattern="\d{8,}"
                           placeholder="Phone Number" required
                           aria-labelledby="accountPhoneLabel accountInfoHeading">
                       <shop-md-decorator error-message="Invalid Phone Number" aria-hidden="true">
@@ -768,17 +768,93 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <section>
                   <h2>Payment Method</h2>
                   
-                    <div class="form-row">
+<!--                     <div class="form-row">
                       <label for="card-element">
                         Credit or debit card
                       </label>
                       <div id="card-element">
                         <!-- A Stripe Element will be inserted here. -->
-                      </div>
+                      <!-- </div> -->
 
                       <!-- Used to display Element errors. -->
-                      <div id="card-errors" role="alert"></div>
-                    </div>
+                      <!-- <div id="card-errors" role="alert"></div> -->
+                    <!-- </div>  -->
+
+                  <div class="row input-row">
+                    <shop-input>
+                      <input type="text" id="ccName" name="ccName" pattern=".{3,}"
+                          placeholder="Cardholder Name" required
+                          autocomplete="cc-name">
+                      <shop-md-decorator error-message="Invalid Cardholder Name" aria-hidden="true">
+                        <label for="ccName">Cardholder Name</label>
+                        <shop-underline></shop-underline>
+                      </shop-md-decorator>
+                    </shop-input>
+                  </div>
+                  <div class="row input-row">
+                    <shop-input>
+                      <input type="tel" id="ccNumber" name="ccNumber" pattern="[\d\s]{15,}"
+                          placeholder="Card Number" required
+                          autocomplete="cc-number">
+                      <shop-md-decorator error-message="Invalid Card Number" aria-hidden="true">
+                        <label for="ccNumber">Card Number</label>
+                        <shop-underline></shop-underline>
+                      </shop-md-decorator>
+                    </shop-input>
+                  </div>
+                  <div class="row input-row">
+                    <div class="column">
+                      <label for="ccExpMonth">Expiry</label>
+                      <shop-select>
+                        <select id="ccExpMonth" name="ccExpMonth" required
+                             autocomplete="cc-exp-month" aria-label="Expiry month">
+                          <option value="01" selected>Jan</option>
+                          <option value="02">Feb</option>
+                          <option value="03">Mar</option>
+                          <option value="04">Apr</option>
+                          <option value="05">May</option>
+                          <option value="06">Jun</option>
+                          <option value="07">Jul</option>
+                          <option value="08">Aug</option>
+                          <option value="09">Sep</option>
+                          <option value="10">Oct</option>
+                          <option value="11">Nov</option>
+                          <option value="12">Dec</option>
+                        </select>
+                        <shop-md-decorator aria-hidden="true">
+                          <shop-underline></shop-underline>
+                        </shop-md-decorator>
+                      </shop-select>
+                      </div>
+                    <shop-select>
+                      <select id="ccExpYear" name="ccExpYear" required
+                          autocomplete="cc-exp-year" aria-label="Expiry year">
+                        <option value="2018" selected>2018</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                      </select>
+                      <shop-md-decorator aria-hidden="true">
+                        <shop-underline></shop-underline>
+                      </shop-md-decorator>
+                    </shop-select>
+                    <shop-input>
+                      <input type="tel" id="ccCVV" name="ccCVV" pattern="\d{3,4}"
+                          placeholder="CVV" required
+                          autocomplete="cc-csc">
+                      <shop-md-decorator error-message="Invalid CVV" aria-hidden="true">
+                        <label for="ccCVV">CVV</label>
+                        <shop-underline></shop-underline>
+                      </shop-md-decorator>
+                    </shop-input>
+                  </div>
+
+
                   <h2>Order Summary</h2>
                   <dom-repeat items="[[cart]]" as="entry">
                     <template>
@@ -978,11 +1054,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           console.log(nativeForm);
 
+          let ccNumber = this.$.ccNumber.value;
+          let ccExpMonth = this.$.ccExpMonth.value;
+          let ccExpYear = this.$.ccExpYear.value;
+          let ccCVV = this.$.ccCVV.value;
+
           let cardInfo = {
-            number: '4242424242424242',
-            cvc: '309',
-            exp_month: '12',
-            exp_year: '2020'
+            number: ccNumber,
+            cvc: ccCVV,
+            exp_month: ccExpMonth,
+            exp_year: ccExpYear
           }
 
           // Stripe
@@ -997,7 +1078,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.log(response, status);
 
             if (response.error) { // Problem!
+              // Handle Error
+              alert(response.error.message)
 
+              my_this._setWaiting(false);
 
             } else { // Token created!
 
@@ -1063,9 +1147,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
        * that don't match the pattern specified in the markup.
        */
       _validateForm() {
-
-        return true;
-
         let form = this.$.checkoutForm;
         let firstInvalid = false;
         let nativeForm = form._form;
