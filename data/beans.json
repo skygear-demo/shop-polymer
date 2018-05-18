@@ -1,0 +1,29 @@
+[
+  {
+    "name":"Skygear Developer Special Blend Coffee Beans",
+    "title":"Skygear Developer Special Blend Coffee Beans",
+    "category":"beans",
+    "price":9.99,
+    "description":"100g of fine blended beans. Recommended by Skygear developers.",
+    "image":"images/coffeebag-skygear-1.jpg",
+    "largeImage":"images/coffeebag-skygear-1.jpg"
+  },
+  {
+    "name":"Skygear PM Special Blend Coffee Beans",
+    "title":"Skygear PM Special Blend Coffee Beans",
+    "category":"beans",
+    "price":9.99,
+    "description":"100g of fine blended beans. Recommended by Skygear PM.",
+    "image":"https://images.unsplash.com/photo-1515471897120-85416077e011?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2b84a021e334aaa6d9571464c5d04237&auto=format&fit=crop&w=534&q=80",
+    "largeImage":"https://images.unsplash.com/photo-1515471897120-85416077e011?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2b84a021e334aaa6d9571464c5d04237&auto=format&fit=crop&w=934&q=80"
+  },
+  {
+    "name":"Skygear DX Special Blend Coffee Beans",
+    "title":"Skygear DX Special Blend Coffee Beans",
+    "category":"beans",
+    "price":9.99,
+    "description":"100g of fine blended beans. Recommended by Skygear DX Team.",
+    "image":"https://images.unsplash.com/photo-1515471897120-85416077e011?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2b84a021e334aaa6d9571464c5d04237&auto=format&fit=crop&w=534&q=80",
+    "largeImage":"https://images.unsplash.com/photo-1515471897120-85416077e011?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=2b84a021e334aaa6d9571464c5d04237&auto=format&fit=crop&w=934&q=80"
+  }
+]

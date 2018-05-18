@@ -1,0 +1,46 @@
+[
+  {
+    "name":"Skygear Mini Plan",
+    "title":"Skygear Mini Plan",
+    "category":"software",
+    "price": 49,
+    "subscription": true,
+    "plan": "skygear-test-plan",
+    "description":"$49/month - Monthly subscription to Skygear Hosting",
+    "image":"images/skygear-mini.png",
+    "largeImage":"images/skygear-mini.png"
+  },
+  {
+    "name":"Skygear Hobbyist Plan",
+    "title":"Skygear Hobbyist Plan",
+    "category":"software",
+    "price": 99,
+    "subscription": true,
+    "plan": "skygear-test-plan",
+    "description":"$99/month - Monthly subscription to Skygear Hosting",
+    "image":"images/skygear-hobbyist.png",
+    "largeImage":"images/skygear-hobbyist.png"
+  },
+  {
+    "name":"Skygear Production Plan",
+    "title":"Skygear Production Plan",
+    "category":"software",
+    "price": 499,
+    "subscription": true,
+    "plan": "skygear-test-plan",
+    "description":"$499/month - Monthly subscription to Skygear Hosting",
+    "image":"images/skygear-production.png",
+    "largeImage":"images/skygear-production.png"
+  },
+  {
+    "name":"Skygear Dedicated Plan",
+    "title":"Skygear Dedicated Plan",
+    "category":"software",
+    "price": 999,
+    "subscription": true,
+    "plan": "skygear-test-plan",
+    "description":"Fexible pricing. Please contact us at hello@skygear.io, we will arrange a tailored plan for you.",
+    "image":"images/skygear-dedicated.png",
+    "largeImage":"images/skygear-dedicated.png"
+  }
+]
